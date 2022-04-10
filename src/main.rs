@@ -1,8 +1,7 @@
-mod farlib;
-
 use std::{env, fs};
 use std::fs::File;
 use std::io::Write;
+use libfar::farlib;
 
 fn print_help(args : Vec<String>) {
     println!("Usage: {} <command> <archive name> [FILES...]", args[0]);
@@ -90,7 +89,7 @@ fn main() {
                 };
                 file_list.push(file_obj);
             }
-            let archive_obj = farlib::FarArchive::new_from_files(archive_name.clone(), file_list);
+            let archive_obj = farlib::FarArchive::new_from_files(file_list);
             let mut file = fs::File::create(archive_name.clone()).expect("Failed to create file");
             file.write_all(&*archive_obj.to_vec()).expect("Failed to write file");
             println!("Created archive {}", archive_name);

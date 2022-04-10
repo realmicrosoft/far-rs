@@ -5,3 +5,12 @@ version = 3
 [[package]]
 name = "far-rs"
 version = "0.1.0"
+dependencies = [
+ "libfar",
+]
+
+[[package]]
+name = "libfar"
+version = "0.1.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "568139c4688441ea7d0a8e59e4680c2e929474f12a7211d248ba4c6710ad5f47"
