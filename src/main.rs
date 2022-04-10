@@ -27,7 +27,7 @@ fn main() {
             print_help(args);
         },
         "test" => {
-            let mut file = fs::read(archive_name).expect("Failed to read file");
+            let file = fs::read(archive_name).expect("Failed to read file");
             let test = farlib::test(&file);
             match test {
                 Ok(archive_obj) => {
@@ -65,8 +65,8 @@ fn main() {
                     fs::create_dir_all(dir_path.clone()).expect("Failed to create directory");
                     let files = archive_with_data.file_data;
                     for file in files {
-                        let mut file_path = format!("{}/{}", dir_path.clone(), file.name);
-                        let mut file_data = file.data;
+                        let file_path = format!("{}/{}", dir_path.clone(), file.name);
+                        let file_data = file.data;
                         let mut file_handle = File::create(file_path).expect("Failed to create file");
                         file_handle.write_all(&file_data).expect("Failed to write file");
                     }
