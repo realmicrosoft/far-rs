@@ -11,6 +11,7 @@ fn print_help(args : Vec<String>) {
     println!("  test - test if file is a valid archive");
     println!("  list - list files in archive");
     println!("  extract - extract files from archive to current directory (will make a new directory)");
+    println!("  create - create a new archive from files specified");
     return;
 }
 
@@ -75,7 +76,25 @@ fn main() {
                     println!("{} is not a valid archive: {}", archive_name, e);
                 }
             }
-        }
+        },
+        "create" => {
+            let mut file_list = Vec::new();
+            for file in &args[3..] {
+                let file_name = file.split("/").last().unwrap();
+                let file_size = fs::metadata(file.clone()).expect("Failed to get file size").len();
+                let file_data = fs::read(file.clone()).expect("Failed to read file");
+                let file_obj = farlib::FarFile {
+                    name: file_name.to_string(),
+                    size: file_size as u32,
+                    data: file_data
+                };
+                file_list.push(file_obj);
+            }
+            let archive_obj = farlib::FarArchive::new_from_files(archive_name.clone(), file_list);
+            let mut file = fs::File::create(archive_name.clone()).expect("Failed to create file");
+            file.write_all(&*archive_obj.to_vec()).expect("Failed to write file");
+            println!("Created archive {}", archive_name);
+        },
         _ => {
             println!("Unknown command: {}", command);
         }
